@@ -83,6 +83,7 @@ For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA cod
 ## Suggested Manual Workarounds
 There is one issue migrated SYCL code fails on any intel CPU as by default sub-group size is 16. But if restricted the subgroup size to 32, the issue is resolved.
 The SYCL code suggestion is described below :-
+
  The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
       ```
       dpct::get_in_order_queue().parallel_for(
