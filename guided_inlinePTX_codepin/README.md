@@ -1,10 +1,11 @@
-# `inlinePTX` Sample
+# `inlinePTX` Sample With CodePin
 
-This sample demonstrates the usage of inline PTX (assembly language) in SYCL kernels. The original CUDA* source code is migrated to SYCL for portability across GPUs from multiple vendors. 
+This sample demonstrates the usage of CodePin with inline PTX (assembly language) for SYCL code. The original CUDA* source code is migrated to SYCL for portability across GPUs from multiple vendors. 
+
 
 | Area                   | Description
 |:---                    |:---
-| What you will learn    | How to migrate and map SYCL equivalent of PTX assembly in CUDA
+| What you will learn    | How to debug and verify the SYCL equivalent of CUDA code
 | Time to complete       | 15 minutes
 | Category               | Concepts and Functionality
 
@@ -12,7 +13,7 @@ This sample demonstrates the usage of inline PTX (assembly language) in SYCL ker
 
 ## Purpose
 
-inlinePTX is a simulation of the PTX command (mov.u32) in kernels.
+This sample demonstrates the CodePin usage experience, For a CUDA source code CodePin generates instrumented for both CUDA and migrated SYCL code. CodePin can analyze most user-defined CUDA class and generate the schema file for CUDA and SYCL classes except classes with virtual inheritance. CodePin reduces the need for extensive debugging by providing capabilities for on-the-fly functional testing during development and migration. This integration ensures that users can identify and address issues promptly, maintaining the integrity and performance of their application throughout the migration process. CodePin is distributed open-source and available at the SYCLomatic repository.
 
 > **Note**: The sample used the open-source [SYCLomatic tool](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html) that assists developers in porting CUDA code to SYCL code. To finish the process, you must complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. You can also use the [Intel® DPC++ Compatibility Tool](https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compatibility-tool.html#gs.5g2aqn) available to augment Base Toolkit.
 
@@ -20,16 +21,18 @@ This sample contains two versions of the code in the following folders:
 
 | Folder Name          | Description
 |:---                  |:---
-|`01_dpct_output`      | Contains the output of the SYCLomatic Tool used to migrate SYCL-compliant code from CUDA code. The tool completely migrates code but needs manual changes to get functional correctness on CPU as generated.
-|`02_sycl_migrated`    | Contains manually migrated SYCL code from CUDA code.
+|`dpct_output`    | Contains the included files common for CUDA and SYCL.
+|`dpct_output_codepin_cuda`    | Contains the migrated instrumented CUDA code from CUDA source code output from the SYCLomatic tool. 
+|`dpct_output_codepin_sycl`    | Contains the migrated instrumented SYCL code from CUDA source code output from the SYCLomatic tool.
 
 ## Prerequisites
 
 | Optimized for         | Description
 |:---                   |:---
-| OS                    | Ubuntu* 20.04
-| Hardware              | Intel® Gen9 <br>Intel® Gen11 <br>Intel® Xeon CPU <br>Intel® Data Center GPU Max <br> Nvidia Tesla P100 <br> Nvidia A100 <br> Nvidia H100 
-| Software              | SYCLomatic (Tag - 20231004) <br> Intel® oneAPI Base Toolkit (Base Kit) version 2024.0 <br> oneAPI for NVIDIA GPU plugin from Codeplay (to run SYCL™ applications on NVIDIA® GPUs)
+| OS                    | Ubuntu* 22.04
+| Hardware (dpct_output_codepin_cuda)             |  Nvidia Tesla P100 <br> Nvidia A100 <br> Nvidia H100 
+| Hardware (dpct_output_codepin_sycl)             | Intel® Gen9 <br>Intel® Gen11 <br>Intel® Xeon CPU <br>Intel® Data Center GPU Max <br> Nvidia Tesla P100 <br> Nvidia A100 <br> Nvidia H100 
+| Software              | SYCLomatic (Tag - 20231004) <br> Intel® oneAPI Base Toolkit (Base Kit) version 2024.1 <br> oneAPI for NVIDIA GPU plugin from Codeplay (to run SYCL™ applications on NVIDIA® GPUs)
 
 For information on how to use SYCLomatic, refer to the materials at *[Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html)*.<br> How to run SYCL™ applications on NVIDIA® GPUs, refer to 
 [oneAPI for NVIDIA GPUs](https://developer.codeplay.com/products/oneapi/nvidia/) plugin from Codeplay.
@@ -41,10 +44,29 @@ This sample demonstrates the migration of the following prominent CUDA features:
 
 InlinePTX sample demonstrates how to implement PTX assembly (mov.u32) in SYCL kernels.
 
+
+
+
+The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
+      ```
+      dpct::get_in_order_queue().parallel_for(
+        sycl::nd_range<3>(cudaGridSize * cudaBlockSize, cudaBlockSize),
+        [=](sycl::nd_item<3> item_ct1) {
+            sequence_gpu(d_ptr, N, item_ct1);
+        });
+      ```
+      Manually defined as below
+      ```
+      dpct::get_in_order_queue().parallel_for(
+        sycl::nd_range<3>(cudaGridSize * cudaBlockSize, cudaBlockSize),
+        [=](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(32)]] {
+            sequence_gpu(d_ptr, N, item_ct1);
+        });
+      ```
 >**Note**: Refer to [Workflow for a CUDA* to SYCL* Migration](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/cuda-sycl-migration-workflow.html) for general information about the migration workflow.
 ## CUDA source code evaluation
 
-The inlinePTX application demonstrates the ability to embed PTX assembly (mov.u32) in a CUDA kernel.  
+The inlinePTX application can embed PTX assembly (mov.u32) in a CUDA kernel.  
 
 > **Note**: For more information on how to use the Syclomatic Tool, visit [Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html#gs.vmhplg).
 
@@ -71,14 +93,15 @@ For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA cod
    ```
    This step creates a JSON file named compile_commands.json with all the compiler invocations and stores the names of the input files and the compiler options.
 
-4. Pass the JSON file as input to the Intel® SYCLomatic Compatibility Tool. The result is written to a folder named dpct_output. The --in-root specifies path to the root of the source tree to be migrated.
+4. Pass the JSON file as input to the Intel® SYCLomatic Compatibility Tool. The --in-root specifies path to the root of the source tree to be migrated. Enable CodePin with the –enable-codepin option dump a `dpct_output_codepin_cuda` (contains cuda with added instrumented code) and also dpct_output_codepin_sycl (contains migrated SYCL with added instrumented code) 
+
    ```
-   c2s -p compile_commands.json --in-root ../../.. --gen-helper-function 
+   c2s -p compile_commands.json --in-root ../../.. --gen-helper-function --enable-codepin
    ```
-## Manual Workarounds
-The following manual change has been done in order to complete the migration.
-   
-1. The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
+## Suggested Manual Workarounds
+There is one issue migrated SYCL code fails on any intel CPU as by default sub-group size is 16. But if restricted the subgroup size to 32, the issue is resolved.
+The SYCL code suggestion is described below :-
+ The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
       ```
       dpct::get_in_order_queue().parallel_for(
         sycl::nd_range<3>(cudaGridSize * cudaBlockSize, cudaBlockSize),
