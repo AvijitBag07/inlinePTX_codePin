@@ -40,12 +40,13 @@ For information on how to use SYCLomatic, refer to the materials at *[Migrate fr
 
 ## Key Implementation Details
 This sample demonstrates the migration of the following prominent codePin feature:
-Instrumentation APIs:
-1. dpctexp::codepin::get_ptr_size_map()[var] =size: Initialize the variable size for which log has to be captured.
 
-2. gen_prolog_API_CP (): Instrumentation function that generates a prologue for a specific code segment. It prepares the environment for the instrumented code and logs the start of an operation.
+Instrumentation APIs:
+- dpctexp::codepin::get_ptr_size_map()[var] =size: Initialize the variable size for which log has to be captured.
+
+- gen_prolog_API_CP (): Instrumentation function that generates a prologue for a specific code segment. It prepares the environment for the instrumented code and logs the start of an operation.
  
-3. gen_epilog_API_CP(): Instrumentation function that generates an epilogue for a specific code segment. It finalizes the environment for the instrumented code and logs the completion of an operation 
+- gen_epilog_API_CP(): Instrumentation function that generates an epilogue for a specific code segment. It finalizes the environment for the instrumented code and logs the completion of an operation 
 
 > **Note**: For more information on how to use the Syclomatic Tool, visit [Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html#gs.vmhplg).
 
