@@ -39,16 +39,11 @@ For information on how to use SYCLomatic, refer to the materials at *[Migrate fr
 
 
 ## Key Implementation Details
-This sample demonstrates the migration of the following prominent CUDA features:
- - PTX Assembly
-
-InlinePTX sample demonstrates how to implement PTX assembly (mov.u32) in SYCL kernels.
-
-
->**Note**: Refer to [Workflow for a CUDA* to SYCL* Migration](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/cuda-sycl-migration-workflow.html) for general information about the migration workflow.
-## CUDA source code evaluation
-
-The inlinePTX application can embed PTX assembly (mov.u32) in a CUDA kernel.  
+This sample demonstrates the migration of the following prominent codePin feature:
+Instrumentation APIs:
+dpctexp::codepin::get_ptr_size_map()[var] =size: Initialize the variable size for which log has to be captured.
+-gen_prolog_API_CP (): Instrumentation function that generates a prologue for a specific code segment. It prepares the environment for the instrumented code and logs the start of an operation.
+-gen_epilog_API_CP(): Instrumentation function that generates an epilogue for a specific code segment. It finalizes the environment for the instrumented code and logs the completion of an operation 
 
 > **Note**: For more information on how to use the Syclomatic Tool, visit [Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html#gs.vmhplg).
 
