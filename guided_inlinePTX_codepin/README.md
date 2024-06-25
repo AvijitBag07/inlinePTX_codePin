@@ -91,7 +91,7 @@ The SYCL code suggestion is described below :-
         [=](sycl::nd_item<3> item_ct1) {
             sequence_gpu(d_ptr, N, item_ct1);
         });
-  ```
+  
       
       Manually defined as below
    ```
