@@ -121,39 +121,25 @@ The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually
 1. Change to the sample directory.
 2. Build the program.
    ```
-   $ mkdir build
-   $ cd build
-   $ cmake .. or ( cmake -D INTEL_MAX_GPU=1 .. ) or ( cmake -D NVIDIA_GPU=1 .. )
+   $ 
+   $ cd dpct_output_codepin_sycl
+   $ make
+   $ 
+   $ cd dpct_output_codepin_cuda
    $ make
    ```
    > **Note**:
-   > - By default, no flags are enabled during build which supports Intel® UHD Graphics, Intel® Gen9, Gen11, Xeon CPU.
-   > - Enable **INTEL_MAX_GPU** flag during build which supports Intel® Data Center GPU Max 1550 or 1100 to get optimized performance.
-   > - Enable **NVIDIA_GPU** flag during build which supports NVIDIA GPUs.([oneAPI for NVIDIA GPUs](https://developer.codeplay.com/products/oneapi/nvidia/) plugin   from Codeplay is required to build for NVIDIA GPUs )
-
-   By default, this command sequence will build the `01_dpct_output` and `02_sycl_migrated` versions of the program.
+   ([oneAPI for NVIDIA GPUs](https://developer.codeplay.com/products/oneapi/nvidia/) plugin   from Codeplay is required to build for NVIDIA GPUs )
   
-3. Run `01_dpct_output` on GPU.
+3. Run `dpct_output_codepin_sycl` on CPU.
    ```
    make run
    ```
-   Run `01_dpct_output` on CPU.
+   
+4. Run `dpct_output_codepin_cuda` on CPU.
    
    ```
-   export ONEAPI_DEVICE_SELECTOR=opencl:cpu
    make run
-   unset ONEAPI_DEVICE_SELECTOR
-   ```
-4. Run `02_sycl_migrated` on GPU.
-   
-   ```
-   make run_sm
-   ```
-   Run `02_sycl_migrated` on CPU.
-   ```
-   export ONEAPI_DEVICE_SELECTOR=opencl:cpu
-   make run_sm
-   unset ONEAPI_DEVICE_SELECTOR
    ```
 
 #### Troubleshooting
