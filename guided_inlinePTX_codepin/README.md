@@ -80,27 +80,25 @@ For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA cod
    ```
    c2s -p compile_commands.json --in-root ../../.. --gen-helper-function --enable-codepin
    ```
-## Suggested Manual Workarounds
-There is one issue migrated SYCL code fails on any intel CPU as by default sub-group size is 16. But if restricted the subgroup size to 32, the issue is resolved.
-The SYCL code suggestion is described below :-
-
- The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
-  ```
+## Manual Workarounds
+The following manual change has been done to complete the migration.
+   
+1. The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
+      ```
       dpct::get_in_order_queue().parallel_for(
         sycl::nd_range<3>(cudaGridSize * cudaBlockSize, cudaBlockSize),
         [=](sycl::nd_item<3> item_ct1) {
             sequence_gpu(d_ptr, N, item_ct1);
         });
-  
-      
+      ```
       Manually defined as below
-   ```
+      ```
       dpct::get_in_order_queue().parallel_for(
         sycl::nd_range<3>(cudaGridSize * cudaBlockSize, cudaBlockSize),
         [=](sycl::nd_item<3> item_ct1) [[intel::reqd_sub_group_size(32)]] {
             sequence_gpu(d_ptr, N, item_ct1);
         });
-   ```
+      ```
 
 ## Build and Run the `inlinePTX` Sample
 
@@ -165,7 +163,7 @@ the `VERBOSE=1` argument:
 ```
 make VERBOSE=1
 ```
-If you receive an error message, troubleshoot the problem using the **Diagnostics Utility for Intel® oneAPI Toolkits**. The diagnostic utility provides configuration and system checks to help find missing dependencies, permissions errors, and other issues. See the [Diagnostics Utility for Intel® oneAPI Toolkits User Guide](https://www.intel.com/content/www/us/en/develop/documentation/diagnostic-utility-user-guide/top.html) for more information on using the utility.
+If you receive an error message, troubleshoot the problem using the **Diagnostics Utility for Intel® oneAPI Toolkits**. The diagnostic utility provides configuration and system checks to help find missing dependencies, permissions errors, and other issues. See the [Diagnostics Utility for Intel® oneAPI Toolkits User Guide](https://www.intel.com/content/www/us/en/docs/oneapi/user-guide-diagnostic-utility/2024-1/overview.html) for more information on using the utility.
 
 
 ## License
