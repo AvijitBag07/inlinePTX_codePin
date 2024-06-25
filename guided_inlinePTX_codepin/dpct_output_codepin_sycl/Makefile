@@ -4,17 +4,26 @@
 
 # CC compiler options:
 CC=icpx
-CC_FLAGS=-fsycl
+CFLAGS=-fsycl
 CC_LIBS=
 
 
 # Include header file diretory:
-INC_DIR = ../dpct_output/include/
-COMMON_DIR = Common 
-OUTPUT = inlinePTX_sycl
+INC_DIR=-I ../dpct_output/include/
+COMMON_DIR=-I Common
 
-all:
-	$(CC) $(CC_FLAGS) Samples/2_Concepts_and_Techniques/inlinePTX/inlinePTX.dp.cpp -I $(INC_DIR) -I $(COMMON_DIR) -o $(OUTPUT)
+TARGET= inlinePTX_sycl
+OBJS= Samples/2_Concepts_and_Techniques/inlinePTX/inlinePTX.dp.cpp
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+        $(CC) $(CFLAGS) $(OBJS) $(INC_DIR) $(COMMON_DIR) -o $(TARGET)
+
+
+run: $(TARGET)
+        ONEAPI_DEVICE_SELECTOR="opencl:cpu" ./$(TARGET)
 
 clean:
-	rm -rf $(OUTPUT) 
+        rm -rf $(TARGET) 
+~                           
