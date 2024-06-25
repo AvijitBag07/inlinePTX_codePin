@@ -138,6 +138,11 @@ Manually defined as below
    ```
    make run
    ```
+5. Compare two json file output using codepin-report.py
+   ```
+   codepin-report.py  --instrumented-cuda-log ./filePath  --instrumented-sycl-log ./filePath [--floating-point-comparison-epsilon <file path>]
+
+   ```  
 
 #### Troubleshooting
 
