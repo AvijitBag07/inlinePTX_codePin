@@ -80,10 +80,10 @@ For this sample, the SYCLomatic tool automatically migrates 100% of the CUDA cod
    ```
    c2s -p compile_commands.json --in-root ../../.. --gen-helper-function --enable-codepin
    ```
-## Manual Workarounds
-The following manual change has been done to complete the migration.
+## Suggested manual Workarounds
+Migrated SYCL code has one issue on all intel CPU SYCL code fails because of subgroup size. The suggestion is given below.
    
-1. The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
+The warp size in CUDA is a fixed constant 32, but in SYCL sub-group size usually can be 16 or 32. Use intel extension [[intel::reqd_sub_group_size(32)]] to restrict the sub-group size to 32.
       ```
       dpct::get_in_order_queue().parallel_for(
         sycl::nd_range<3>(cudaGridSize * cudaBlockSize, cudaBlockSize),
