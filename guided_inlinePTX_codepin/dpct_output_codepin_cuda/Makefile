@@ -3,27 +3,25 @@
 ## CC COMPILER OPTIONS ##
 
 # CC compiler options:
-CC=g++
-CC_FLAGS=
+CC=nvcc
+CFLAGS=
 CC_LIBS=
 
-##########################################################
-
-## NVCC COMPILER OPTIONS ##
-
-# NVCC compiler options:
-NVCC=nvcc
-NVCC_FLAGS=
-NVCC_LIBS=
 
 # Include header file diretory:
-INC_DIR = ../dpct_output/include/
-COMMON_DIR = Common 
+INC_DIR=-I ../dpct_output/include/
+COMMON_DIR=-I Common
+TARGET= inlinePTX_cuda
+OBJS= Samples/2_Concepts_and_Techniques/inlinePTX/inlinePTX.cu
 
-OUTPUT = inlinePTX_cuda
 
-all:
-	$(NVCC) Samples/2_Concepts_and_Techniques/inlinePTX/inlinePTX.cu -I $(INC_DIR) -I $(COMMON_DIR) -o $(OUTPUT)
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+        $(CC) $(CFLAGS) $(OBJS) $(INC_DIR) $(COMMON_DIR) -o $(TARGET)
+
+run: $(TARGET)
+        ./$(TARGET)
 
 clean:
-	rm -rf $(OUTPUT) 
+        rm -rf $(TARGET) 
