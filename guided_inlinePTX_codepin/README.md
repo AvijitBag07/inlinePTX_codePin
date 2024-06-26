@@ -17,13 +17,13 @@ This sample demonstrates the CodePin usage experience, For a CUDA source code Co
 
 > **Note**: The sample used the open-source [SYCLomatic tool](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html) that assists developers in porting CUDA code to SYCL code. To finish the process, you must complete the rest of the coding manually and then tune to the desired level of performance for the target architecture. You can also use the [Intel® DPC++ Compatibility Tool](https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compatibility-tool.html#gs.5g2aqn) available to augment Base Toolkit.
 
-This sample contains two versions of the code and one common in the following folders:
+This sample contains two versions of the code in the following folders:
 
 | Folder Name          | Description
 |:---                  |:---
 |`dpct_output_codepin_cuda`    | Contains the migrated instrumented CUDA code from CUDA source code output from the SYCLomatic tool. 
 |`dpct_output_codepin_sycl`    | Contains the migrated instrumented SYCL code from CUDA source code output from the SYCLomatic tool.
-|`dpct_output`    | Contains the included files common for CUDA and SYCL.
+
 
 ## Prerequisites
 
