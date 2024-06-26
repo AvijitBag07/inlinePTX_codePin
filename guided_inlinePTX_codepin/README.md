@@ -42,7 +42,7 @@ For information on how to use SYCLomatic, refer to the materials at *[Migrate fr
 This sample demonstrates the migration of the following prominent codePin feature:
 
 Instrumentation APIs are as below:
-- dpctexp::codepin::get_ptr_size_map()[var] =size: Initialize the variable size for which log has to be captured.
+- get_ptr_size_map()[var] =size: Initialize the variable size for which log has to be captured.
 
 - gen_prolog_API_CP (): Instrumentation function that generates a prologue for a specific code segment. It prepares the environment for the instrumented code and logs the start of an operation.
  
