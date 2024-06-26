@@ -41,12 +41,12 @@ For information on how to use SYCLomatic, refer to the materials at *[Migrate fr
 ## Key Implementation Details
 This sample demonstrates the migration of the following prominent codePin feature:
 
-Instrumentation APIs are as below:
-- get_ptr_size_map()[var] =size: Initialize the variable size for which log has to be captured.
+**Instrumentation APIs are as below:**
+- get_ptr_size_map()[var] =size: Initialize the variable size for which the log has to be captured.
 
 - gen_prolog_API_CP (): Instrumentation function that generates a prologue for a specific code segment. It prepares the environment for the instrumented code and logs the start of an operation.
  
-- gen_epilog_API_CP(): Instrumentation function that generates an epilogue for a specific code segment. It finalizes the environment for the instrumented code and logs the completion of an operation 
+- gen_epilog_API_CP(): Instrumentation function that generates an epilogue for a specific code segment. It finalizes the environment for the instrumented code and logs the completion of an operation
 
 > **Note**: For more information on how to use the Syclomatic Tool, visit [Migrate from CUDA* to C++ with SYCL*](https://www.intel.com/content/www/us/en/developer/tools/oneapi/training/migrate-from-cuda-to-cpp-with-sycl.html#gs.vmhplg).
 
@@ -135,12 +135,15 @@ Manually defined as below
    ```
    make run
    ```
+   This will produce a ‘CodePin_SYCL_<date>.json’ file, which contains runtime behavior data for the SYCL code
    
 4. Run `dpct_output_codepin_cuda` on CPU.
    
    ```
    make run
    ```
+   This will produce a ‘CodePin_CUDA_<date>.json’ file, which contains runtime behavior data for the CUDA code.
+
 5. Compare two json file output using codepin-report.py
    ```
    codepin-report.py  --instrumented-cuda-log ./filePath  --instrumented-sycl-log ./filePath [--floating-point-comparison-epsilon <file path>]
